@@ -3,6 +3,7 @@ package todo
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"time"
 )
@@ -75,11 +76,18 @@ func (t *Todos) Load(filename string) error {
 }
 
 func (t *Todos) Store(filename string) error {
-	data, err := json.Marshal(t)
+	data, err := json.MarshalIndent(t, "", "")
 	if err != nil {
 		return err
 	}
 
 	return os.WriteFile(filename, data, 0644)
 
+}
+
+func (t *Todos) Print() {
+	for i, item := range *t {
+		i++
+		fmt.Printf("%d - %s\n", i, item.Task)
+	}
 }
