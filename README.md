@@ -54,7 +54,7 @@ Este proyecto consiste en una aplicación de lista de tareas (Todo List) diseña
 ```bash
 ./todo -add número_de_tarea_eliminar
 ```
-
+>*Para eliminar una tarea **debes** utilizar el número de la tarea que quieras eliminar*.
 
 ## Autor
 
