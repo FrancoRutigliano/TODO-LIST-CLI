@@ -50,6 +50,12 @@ Este proyecto consiste en una aplicación de lista de tareas (Todo List) diseña
 ```
 > *Para agregar una tarea **no** debes utilizar comillas*.
 
+***Completar Tareas***
+```bash
+./TODO -complete número_de_tarea_eliminar
+```
+>*Para marcar como completada una tarea **debes** utilizar el número de la tarea que quieras eliminar*
+
 ***Eliminar Tarea***
 ```bash
 ./todo -add número_de_tarea_eliminar
