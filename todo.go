@@ -56,6 +56,20 @@ func (t *Todos) Delete(index int) error {
 	return nil
 }
 
+func (t *Todos) DeleteAll() error {
+	ls := *t
+
+	if len(ls) == 0 {
+		return errors.New("La lista esta vacía")
+	}
+
+	*t = []Item{}
+
+	fmt.Println("Tareas Eliminadas")
+
+	return nil
+}
+
 func (t *Todos) Load(filename string) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
