@@ -26,6 +26,8 @@ func main() {
 
 	list := flag.Bool("list", false, "list all todos")
 
+	delAll := flag.Bool("delAll", false, "delete all the todos")
+
 	flag.Parse()
 
 	todos := &todo.Todos{}
@@ -69,6 +71,20 @@ func main() {
 			fmt.Fprintln(os.Stderr, err.Error())
 			os.Exit(1)
 		}
+		err = todos.Store(todoFile)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+
+	case *delAll:
+		err := todos.DeleteAll()
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+
 		err = todos.Store(todoFile)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
