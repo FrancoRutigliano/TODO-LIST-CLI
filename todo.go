@@ -56,6 +56,20 @@ func (t *Todos) Delete(index int) error {
 	return nil
 }
 
+func (t *Todos) DeleteAll() error {
+	ls := *t
+
+	if len(ls) == 0 {
+		return errors.New("La lista esta vacía")
+	}
+
+	*t = []Item{}
+
+	fmt.Println("Tareas Eliminadas")
+
+	return nil
+}
+
 func (t *Todos) Load(filename string) error {
 	file, err := os.ReadFile(filename)
 	if err != nil {
@@ -89,43 +103,57 @@ func (t *Todos) Store(filename string) error {
 
 func (t *Todos) Print() {
 	table := simpletable.New()
-
-	table.Header = &simpletable.Header{
-		Cells: []*simpletable.Cell{
-			{Align: simpletable.AlignCenter, Text: "#"},
-			{Align: simpletable.AlignCenter, Text: "NAME"},
-			{Align: simpletable.AlignCenter, Text: "STATUS"},
-			{Align: simpletable.AlignCenter, Text: "CREATED_AT"},
-			{Align: simpletable.AlignCenter, Text: "COMPLETED_AT"},
-		},
-	}
-
 	var cells [][]*simpletable.Cell
-
-	for idx, item := range *t {
-		idx++
-
-		task := blue(item.Task)
-		done := blue("no")
-		if item.Done {
-			task = green(fmt.Sprintf("\u2705 %s", item.Task))
-			done = green("yes")
+	if len(*t) == 0 {
+		table.Header = &simpletable.Header{
+			Cells: []*simpletable.Cell{
+				{Align: simpletable.AlignCenter, Text: "Mensaje"},
+			},
 		}
 
 		cells = append(cells, *&[]*simpletable.Cell{
-			{Text: fmt.Sprintf("%d", idx)},
-			{Text: task},
-			{Text: done},
-			{Text: item.CreatedAt.Format(time.RFC822)},
-			{Text: item.CompletedAt.Format(time.RFC822)},
+			{Text: "No hay tareas agendadas aún"},
 		})
+
+		table.Body = &simpletable.Body{Cells: cells}
+
+	} else {
+		table.Header = &simpletable.Header{
+			Cells: []*simpletable.Cell{
+				{Align: simpletable.AlignCenter, Text: "#"},
+				{Align: simpletable.AlignCenter, Text: "NAME"},
+				{Align: simpletable.AlignCenter, Text: "STATUS"},
+				{Align: simpletable.AlignCenter, Text: "CREATED_AT"},
+				{Align: simpletable.AlignCenter, Text: "COMPLETED_AT"},
+			},
+		}
+
+		for idx, item := range *t {
+			idx++
+
+			task := blue(item.Task)
+			done := blue("no finalizada")
+			if item.Done {
+				task = green(fmt.Sprintf("\u2705 %s", item.Task))
+				done = green("Finalizada")
+			}
+
+			cells = append(cells, *&[]*simpletable.Cell{
+				{Text: fmt.Sprintf("%d", idx)},
+				{Text: task},
+				{Text: done},
+				{Text: item.CreatedAt.Format(time.RFC822)},
+				{Text: item.CompletedAt.Format(time.RFC822)},
+			})
+		}
+
+		table.Body = &simpletable.Body{Cells: cells}
+
+		table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("Tenes pendientes %d todos", t.CountPending()))},
+		}}
+
 	}
-
-	table.Body = &simpletable.Body{Cells: cells}
-
-	table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
-		{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("You have Pending %d todos", t.CountPending()))},
-	}}
 
 	table.SetStyle(simpletable.StyleUnicode)
 
