@@ -52,9 +52,9 @@ Este proyecto consiste en una aplicación de lista de tareas (Todo List) diseña
 
 ***Completar Tareas***
 ```bash
-./TODO -complete número_de_tarea_eliminar
+./TODO -complete número_de_tarea_completar
 ```
->*Para marcar como completada una tarea **debes** utilizar el número de la tarea que quieras eliminar*
+>*Para marcar como completada una tarea **debes** utilizar el número de la tarea que quieras completar*
 
 ***Eliminar Tarea***
 ```bash
